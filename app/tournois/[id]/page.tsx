@@ -31,9 +31,7 @@ export default function TournoiDetailPage() {
     return (
       <div className="container-app pt-12">
         <Empty icon="🤷" title="Tournoi introuvable">
-          <Link href="/tournois" className="btn btn-primary mt-4">
-            Voir les tournois
-          </Link>
+          <Link href="/tournois" className="btn btn-primary mt-4">Voir les tournois</Link>
         </Empty>
       </div>
     );
@@ -51,30 +49,20 @@ export default function TournoiDetailPage() {
 
   return (
     <div className="container-app pt-8">
-      {/* Header */}
       <div className="relative overflow-hidden bg-grad-hero text-white rounded-xl2 p-7 sm:p-8 mb-7">
         <div
           aria-hidden
           className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 90% 20%,rgba(244,195,0,.25),transparent 50%)",
-          }}
+          style={{ backgroundImage: "radial-gradient(circle at 90% 20%,rgba(244,195,0,.25),transparent 50%)" }}
         />
         <div className="relative grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-6 items-center">
           <div className="text-[72px] leading-none">{t.bannerEmoji || "🏆"}</div>
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-2">
               <StatusBadge status={t.status} />
-              {iAmOrga && (
-                <span className="badge bg-yellow-100 text-yellow-800">
-                  ⚙️ Organisateur
-                </span>
-              )}
+              {iAmOrga && (<span className="badge bg-yellow-100 text-yellow-800">⚙️ Organisateur</span>)}
             </div>
-            <h1 className="font-display text-[40px] sm:text-[48px] tracking-wider leading-none mb-2">
-              {t.name}
-            </h1>
+            <h1 className="font-display text-[40px] sm:text-[48px] tracking-wider leading-none mb-2">{t.name}</h1>
             <p className="opacity-90 max-w-[600px]">{t.description}</p>
             <div className="flex gap-5 mt-3 flex-wrap">
               <Stat label="Joueurs" value={`${t.players.length}/${t.maxPlayers}`} />
@@ -83,27 +71,32 @@ export default function TournoiDetailPage() {
             </div>
           </div>
           <div className="flex flex-col gap-2 md:items-end">
-            {t.status !== "completed" &&
-              !iAmIn &&
-              t.players.length < t.maxPlayers &&
-              me && (
-                <button
-                  onClick={() => {
-                    joinTournament(t.id);
-                    toast("Inscription confirmée ✅", "success");
-                  }}
-                  className="btn btn-accent"
-                >
-                  ⚡ Rejoindre
-                </button>
-              )}
+            {t.status !== "completed" && !iAmIn && t.players.length < t.maxPlayers && me && (
+              <button
+                onClick={() => {
+                  joinTournament(t.id);
+                  toast("Inscription confirmée ✅", "success");
+                }}
+                className="btn btn-accent"
+              >
+                ⚡ Rejoindre
+              </button>
+            )}
+            <Link
+              href={`/tournois/${t.id}/live`}
+              target="_blank"
+              className="btn text-white bg-white/15 border border-white/30 hover:bg-white/25"
+              title="Mode plein écran pour brancher sur la télé"
+            >
+              📺 Mode live
+            </Link>
             {iAmIn && t.status === "open" && t.createdBy !== me && (
               <button
                 onClick={() => {
                   leaveTournament(t.id);
                   toast("Tu as quitté le tournoi");
                 }}
-                className="btn text-white bg-white/10 border border-white/30 hover:bg-white/20"
+                className="btn text-white/80 bg-white/5 border border-white/20 hover:bg-white/15"
               >
                 Quitter
               </button>
@@ -112,14 +105,9 @@ export default function TournoiDetailPage() {
         </div>
       </div>
 
-      {/* Tabs */}
       <div className="flex gap-1 border-b border-border mb-6 overflow-x-auto">
         {TABS.map((x) => (
-          <button
-            key={x.k}
-            onClick={() => setTab(x.k)}
-            className={clsx("tab", tab === x.k && "tab-active")}
-          >
+          <button key={x.k} onClick={() => setTab(x.k)} className={clsx("tab", tab === x.k && "tab-active")}>
             {x.label}
           </button>
         ))}
@@ -137,9 +125,7 @@ export default function TournoiDetailPage() {
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
     <div>
-      <div className="font-display text-[26px] text-oly-yellow leading-none tracking-wider">
-        {value}
-      </div>
+      <div className="font-display text-[26px] text-oly-yellow leading-none tracking-wider">{value}</div>
       <div className="text-[13px] opacity-85">{label}</div>
     </div>
   );
