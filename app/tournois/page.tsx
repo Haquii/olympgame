@@ -23,8 +23,7 @@ export default function TournoisPage() {
   const [filter, setFilter] = useState<Filter>("all");
 
   const filtered = useMemo(
-    () =>
-      tournaments.filter((t) => (filter === "all" ? true : t.status === filter)),
+    () => tournaments.filter((t) => (filter === "all" ? true : t.status === filter)),
     [tournaments, filter]
   );
 
@@ -32,25 +31,15 @@ export default function TournoisPage() {
     <div className="container-app pt-8">
       <header className="flex justify-between items-end gap-6 flex-wrap mb-6">
         <div>
-          <h2 className="font-display text-[38px] tracking-wider leading-none">
-            Tous les tournois
-          </h2>
-          <p className="text-ink-soft text-[15px] mt-1.5">
-            Trouve un tournoi à rejoindre, ou lance le tien.
-          </p>
+          <h2 className="font-display text-[38px] tracking-wider leading-none">Tous les tournois</h2>
+          <p className="text-ink-soft text-[15px] mt-1.5">Trouve un tournoi à rejoindre, ou lance le tien.</p>
         </div>
-        <Link href="/creer" className="btn btn-primary">
-          + Créer un tournoi
-        </Link>
+        <Link href="/creer" className="btn btn-primary">+ Créer un tournoi</Link>
       </header>
 
       <div className="flex flex-wrap gap-2.5 mb-6">
         {FILTERS.map((f) => (
-          <button
-            key={f.k}
-            onClick={() => setFilter(f.k)}
-            className={clsx("filter-pill", filter === f.k && "filter-pill-active")}
-          >
+          <button key={f.k} onClick={() => setFilter(f.k)} className={clsx("filter-pill", filter === f.k && "filter-pill-active")}>
             {f.label}
           </button>
         ))}
@@ -62,9 +51,7 @@ export default function TournoisPage() {
         </Empty>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((t) => (
-            <TournamentCard key={t.id} t={t} />
-          ))}
+          {filtered.map((t) => (<TournamentCard key={t.id} t={t} />))}
         </div>
       )}
     </div>
