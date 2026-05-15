@@ -16,12 +16,35 @@ export type GameResult = {
   rank: number;
 };
 
+export type GameFormat =
+  | "ranked"
+  | "round_robin"
+  | "single_elim"
+  | "double_elim"
+  | "swiss";
+
+export type Match = {
+  id: string;
+  round: number;
+  position: number;
+  bracket?: "winners" | "losers" | "finals";
+  playerA: string | null;
+  playerB: string | null;
+  scoreA: number | null;
+  scoreB: number | null;
+  winnerId: string | null;
+  nextMatchId?: string | null;
+  nextLoserMatchId?: string | null;
+};
+
 export type Game = {
   id: string;
   name: string;
   emoji: string;
   pointsSystem: PointEntry[];
   results: GameResult[];
+  format?: GameFormat;
+  matches?: Match[];
 };
 
 export type TournamentStatus = "open" | "in_progress" | "completed";

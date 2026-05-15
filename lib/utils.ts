@@ -20,7 +20,7 @@ export const POPULAR_GAMES: { name: string; emoji: string }[] = [
   { name: "Trackmania", emoji: "🏁" },
   { name: "Tetris", emoji: "🧩" },
   { name: "Quiz", emoji: "🧠" },
-]
+];
 
 export const AVATAR_COLORS = [
   "#0085C7",
