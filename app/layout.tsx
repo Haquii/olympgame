@@ -4,7 +4,10 @@ import Nav from "@/components/Nav";
 import ToastHost from "@/components/ToastHost";
 import Footer from "@/components/Footer";
 
+const BASE = process.env.NEXT_PUBLIC_BASE_URL || "https://olympgame.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE),
   title: "Olymp'Game — Tournois de jeux vidéo entre amis",
   description:
     "Crée et rejoins des tournois multi-jeux fun et gratuits. Co-organisateurs, barème de points configurable, classements en direct.",
