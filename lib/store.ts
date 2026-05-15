@@ -6,9 +6,7 @@ import type {
   AppState,
   Game,
   GameResult,
-  PointEntry,
   Tournament,
-  TournamentStatus,
   User,
 } from "./types";
 import { seedState } from "./seed";
@@ -16,13 +14,9 @@ import { DEFAULT_POINTS, pickColor, uid } from "./utils";
 
 type Actions = {
   reset: () => void;
-
-  // user
   signUp: (name: string) => User;
   updateProfile: (patch: Partial<Pick<User, "name" | "color" | "avatar">>) => void;
   setCurrentUser: (id: string | null) => void;
-
-  // tournament
   createTournament: (
     data: Omit<
       Tournament,
@@ -31,23 +25,22 @@ type Actions = {
   ) => Tournament;
   updateTournament: (id: string, patch: Partial<Tournament>) => void;
   deleteTournament: (id: string) => void;
-
   joinTournament: (id: string, userId?: string) => void;
   leaveTournament: (id: string, userId?: string) => void;
-
   addOrganizer: (tid: string, uid: string) => void;
   removeOrganizer: (tid: string, uid: string) => void;
-
-  // games
-  addGame: (tid: string, name: string, emoji: string) => void;
+  addGame: (
+    tid: string,
+    name: string,
+    emoji: string,
+    format?: import("./types").GameFormat
+  ) => void;
   updateGame: (
     tid: string,
     gid: string,
-    patch: Partial<Pick<Game, "name" | "emoji" | "pointsSystem">>
+    patch: Partial<Pick<Game, "name" | "emoji" | "pointsSystem" | "matches">>
   ) => void;
   removeGame: (tid: string, gid: string) => void;
-
-  // results
   saveResults: (tid: string, gid: string, results: GameResult[]) => void;
 };
 
@@ -168,13 +161,15 @@ export const useStore = create<Store>()(
           }),
         })),
 
-      addGame: (tid, name, emoji) => {
+      addGame: (tid, name, emoji, format = "ranked") => {
         const g: Game = {
           id: uid("g"),
           name,
           emoji: emoji || "🎮",
           pointsSystem: [...DEFAULT_POINTS],
           results: [],
+          format,
+          matches: format === "ranked" ? undefined : [],
         };
         set((s) => ({
           tournaments: s.tournaments.map((t) =>
@@ -226,14 +221,12 @@ export const useStore = create<Store>()(
   )
 );
 
-// helpers
 export const useUser = (id: string | null | undefined) =>
   useStore((s) => (id ? s.users.find((u) => u.id === id) ?? null : null));
 
 export const useTournament = (id: string | undefined) =>
   useStore((s) => (id ? s.tournaments.find((t) => t.id === id) ?? null : null));
 
-// SSR-safe hook to know if store is hydrated
 import { useEffect, useState } from "react";
 export function useHasHydrated(): boolean {
   const [hydrated, setHydrated] = useState(false);
@@ -245,7 +238,6 @@ export function useHasHydrated(): boolean {
   return hydrated;
 }
 
-// toast system (separate but lives near store)
 type Toast = { id: string; msg: string; type?: "success" | "error" | "" };
 type ToastStore = {
   toasts: Toast[];
